@@ -4,7 +4,7 @@ export default function Home() {
       <div className="mx-auto max-w-4xl">
         <header className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-            Neighborhood Listing Platform
+            Neighborhood Listing Platform (v2)
           </h1>
           <p className="mt-4 text-lg text-gray-600">
             Connecting residents with local listings, neighborhood sponsors, and

@@ -1,0 +1,10 @@
+PASS  prop-103
+PASS  prop-104
+PASS  prop-105
+PASS  prop-106
+PASS  prop-107
+PASS  prop-108
+PASS  prop-109
+PASS  prop-110
+
+8/8 records passed

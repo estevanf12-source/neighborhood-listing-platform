@@ -1,0 +1,32 @@
+FAIL  prop-103
+       (root) must have required property 'title'
+       (root) must have required property 'address'
+       (root) must NOT have additional properties
+       (root) must NOT have additional properties
+       (root) must NOT have additional properties
+FAIL  prop-104
+       (root) must have required property 'title'
+       (root) must have required property 'address'
+       (root) must NOT have additional properties
+       (root) must NOT have additional properties
+       (root) must NOT have additional properties
+FAIL  prop-105
+       (root) must have required property 'title'
+       (root) must have required property 'address'
+       (root) must NOT have additional properties
+       (root) must NOT have additional properties
+       (root) must NOT have additional properties
+FAIL  prop-106
+       (root) must have required property 'title'
+       (root) must have required property 'address'
+       (root) must NOT have additional properties
+       (root) must NOT have additional properties
+       (root) must NOT have additional properties
+FAIL  prop-107
+       (root) must have required property 'title'
+       (root) must have required property 'address'
+       (root) must NOT have additional properties
+       (root) must NOT have additional properties
+       (root) must NOT have additional properties
+
+0/5 records passed

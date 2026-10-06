@@ -1,4 +1,18 @@
 [
-  { "property_id": "prop-101", "sponsor_id": "spon-01", "placement": "banner" },
-  { "property_id": "prop-102", "sponsor_id": "spon-01", "placement": "banner" }
+{"property_id":"prop-103","sponsor_id":"spon-01","placement":"banner"},
+{"property_id":"prop-103","sponsor_id":"spon-02","placement":"sidebar"},
+{"property_id":"prop-104","sponsor_id":"spon-01","placement":"banner"},
+{"property_id":"prop-104","sponsor_id":"spon-02","placement":"sidebar"},
+{"property_id":"prop-105","sponsor_id":"spon-01","placement":"banner"},
+{"property_id":"prop-105","sponsor_id":"spon-02","placement":"sidebar"},
+{"property_id":"prop-106","sponsor_id":"spon-01","placement":"banner"},
+{"property_id":"prop-106","sponsor_id":"spon-02","placement":"sidebar"},
+{"property_id":"prop-107","sponsor_id":"spon-01","placement":"banner"},
+{"property_id":"prop-107","sponsor_id":"spon-02","placement":"sidebar"},
+{"property_id":"prop-108","sponsor_id":"spon-01","placement":"banner"},
+{"property_id":"prop-108","sponsor_id":"spon-02","placement":"sidebar"},
+{"property_id":"prop-109","sponsor_id":"spon-01","placement":"banner"},
+{"property_id":"prop-109","sponsor_id":"spon-02","placement":"sidebar"},
+{"property_id":"prop-110","sponsor_id":"spon-01","placement":"banner"},
+{"property_id":"prop-110","sponsor_id":"spon-02","placement":"sidebar"}
 ]

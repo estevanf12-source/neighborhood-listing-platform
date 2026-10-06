@@ -1,0 +1,14 @@
+{
+  "property_id": "prop-101",
+  "title": "Mid-Century Modern Villa",
+  "address": { "street": "1428 Elm Avenue", "city": "Pasadena", "state": "CA", "zip_code": "91104" },
+  "price": 1250000,
+  "bedrooms": 3,
+  "bathrooms": 2,
+  "square_feet": 2100,
+  "property_type": "house",
+  "image_url": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
+  "image_alt": "Front view of single-story mid-century home with large floor-to-ceiling windows and xeriscaped lawn",
+  "is_featured": true,
+  "local_sponsors": ["spon-01"]
+}

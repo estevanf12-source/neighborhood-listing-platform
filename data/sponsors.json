@@ -1,0 +1,11 @@
+[
+  {
+    "sponsor_id": "spon-01",
+    "business_name": "Pacific Coast Mortgage",
+    "headline": "Lock in 30-year fixed rates under 5.8% this week only.",
+    "cta_text": "Check Eligibility",
+    "target_url": "https://example.com/rates",
+    "logo_url": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=100&q=80",
+    "logo_alt": "Pacific Coast Mortgage geometric triangle corporate emblem"
+  }
+]

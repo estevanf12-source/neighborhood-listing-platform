@@ -1,30 +1,6 @@
-export interface Property {
-  id: string;
-  title: string;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-  };
-  price: number;
-  bedrooms: number;
-  bathrooms: number;
-  squareFeet: number;
-  imageUrl: string;
-  imageAlt: string;
-  isFeatured?: boolean;
-}
-
-export interface Sponsor {
-  id: string;
-  businessName: string;
-  headline: string;
-  ctaText: string;
-  targetUrl: string;
-  logoUrl: string;
-  logoAlt: string;
-}
+// Types are derived from the Zod schemas (single source of truth).
+// See src/lib/schemas.ts and docs/adr/001-data-contract.md.
+export type { PropertyRecord as Property, SponsorRecord as Sponsor } from '@/lib/schemas';
 
 export interface FilterCriteria {
   minPrice: string;

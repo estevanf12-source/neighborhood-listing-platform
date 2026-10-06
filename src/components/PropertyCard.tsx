@@ -48,7 +48,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
 
         <h3 className="mt-1 text-lg font-semibold text-slate-800">
           <a
-            href={`/properties/${property.id}`}
+            href={`/properties/${property.propertyId}`}
             className="focus-visible:rounded focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:outline-none after:absolute after:inset-0 after:content-['']"
           >
             {property.title}

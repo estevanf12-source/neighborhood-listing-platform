@@ -1,0 +1,29 @@
+PASS  property[0] prop-103
+PASS  property[1] prop-104
+PASS  property[2] prop-105
+PASS  property[3] prop-106
+PASS  property[4] prop-107
+PASS  property[5] prop-108
+PASS  property[6] prop-109
+PASS  property[7] prop-110
+PASS  sponsor[0] spon-01
+PASS  sponsor[1] spon-02
+PASS  property_sponsor[0] prop-103
+PASS  property_sponsor[1] prop-103
+PASS  property_sponsor[2] prop-104
+PASS  property_sponsor[3] prop-104
+PASS  property_sponsor[4] prop-105
+PASS  property_sponsor[5] prop-105
+PASS  property_sponsor[6] prop-106
+PASS  property_sponsor[7] prop-106
+PASS  property_sponsor[8] prop-107
+PASS  property_sponsor[9] prop-107
+PASS  property_sponsor[10] prop-108
+PASS  property_sponsor[11] prop-108
+PASS  property_sponsor[12] prop-109
+PASS  property_sponsor[13] prop-109
+PASS  property_sponsor[14] prop-110
+PASS  property_sponsor[15] prop-110
+PASS  property_sponsor[16] prop-103
+
+All records valid; all foreign keys resolve.

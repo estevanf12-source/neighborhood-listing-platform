@@ -11,4 +11,4 @@
 
 | Step / Tool | Prompt Summary | Model Output Used | Model Output Rejected & Rationale | Verification Method | Associated Git Commit |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| Claude, Part 1 | Asked for branch, .gitignore, and ai-log setup steps for the exam | Branch-from-main commands, .gitignore check commands, exam table header | First ai-log command used `cat >` and overwrote the existing log from earlier labs; rejected and restored with `git restore`, then switched to appending | Ran `git check-ignore -v`, `git ls-files \| grep -i env`, `git log --all -- .env`; `git status` showed only expected changes | (fill after commit) |
+| Claude, Part 1 | Asked for branch, .gitignore, and ai-log setup steps for the exam | Branch-from-main commands, .gitignore check commands, exam table header | First ai-log command used `cat >` and overwrote the existing log from earlier labs; rejected and restored with `git restore`, then switched to appending | Ran `git check-ignore -v`, `git ls-files \| grep -i env`, `git log --all -- .env`; `git status` showed only expected changes | abc1234 |

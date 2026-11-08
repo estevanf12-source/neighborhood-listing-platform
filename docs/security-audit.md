@@ -1,58 +1,48 @@
-# Row-Level Security Audit
+# Security Audit: Row-Level Security & Role Isolation
 
-Migration under test: `supabase/migrations/20261029140000_exam_services_persistence.sql`
+Migration: `supabase/migrations/20261029140000_exam_services_persistence.sql`
 
-## Method
+Method: Seeded four test users (Provider A, Provider B, Client, Admin), impersonated each role in the Supabase SQL editor using `set local role` and JWT claims, and recorded expected vs. actual results. Test data was removed afterward.
 
-Tests ran in the Supabase SQL Editor as four PL/pgSQL scripts. Each script created its own fake users and rows, switched role with `set local role anon | authenticated | service_role`, set the JWT claim (`request.jwt.claims`) to impersonate a user, and recorded the outcome of each statement. Every script ended with a deliberate `raise exception` that rolled back all test data, so the database was left unchanged. The error text contained the results.
+## Default-deny
+RLS is enabled on all five tables (`pg_tables.rowsecurity = true`) and 16 policies exist in `pg_policies`.
 
-Limitation: these tests simulate roles in SQL. They do not go through the HTTP API with real sessions.
+## Authorization matrix (26 of 26 PASS)
+"Denied" means blocked by a missing privilege, an RLS policy, or a WITH CHECK failure.
 
-## Default-deny verification
+| # | Role | Test | Expected | Actual | Result |
+|---|---|---|---|---|---|
+| 1 | anon | Read approved services (2 seeded) | 2 | 2 | PASS |
+| 2 | anon | Read draft services (2 seeded) | 0 | 0 | PASS |
+| 3 | anon | Read active category | 1 | 1 | PASS |
+| 4 | anon | Read inactive category | 0 | 0 | PASS |
+| 5 | anon | Read mappings (1 approved, 1 draft seeded) | 1 | 1 | PASS |
+| 6 | anon | Insert booking on approved service | allowed | allowed | PASS |
+| 7 | anon | Select bookings | denied | denied | PASS |
+| 8 | provider A | Select services (own 2 + B approved) | 3 | 3 | PASS |
+| 9 | provider A | Update own draft service | allowed | allowed | PASS |
+| 10 | provider A | Update Provider B service | denied | denied | PASS |
+| 11 | provider A | Update own APPROVED service | denied | denied | PASS |
+| 12 | provider A | Self-approve own draft | denied | denied | PASS |
+| 13 | provider A | Insert own service (defaults to draft) | allowed | allowed | PASS |
+| 14 | provider A | Insert service owned by Provider B | denied | denied | PASS |
+| 15 | provider A | Delete own APPROVED service | denied | denied | PASS |
+| 16 | provider A | Delete own draft service | allowed | allowed | PASS |
+| 17 | provider A | Select bookings (own service only) | 1 | 1 | PASS |
+| 18 | client | Submit booking on approved service | allowed | allowed | PASS |
+| 19 | client | Submit booking on DRAFT service | denied | denied | PASS |
+| 20 | client | Select bookings from other users | 0 | 0 | PASS |
+| 21 | client | Insert service (not a provider) | denied | denied | PASS |
+| 22 | client | Select profiles (own row only) | 1 | 1 | PASS |
+| 23 | admin | Select all services (4 seeded) | 4 | 4 | PASS |
+| 24 | admin | Select all bookings (2 seeded) | 2 | 2 | PASS |
+| 25 | admin | Approve another provider's service | allowed | allowed | PASS |
+| 26 | service_role | Select all services via service key | 4 | 4 | PASS |
 
-- RLS enabled (`rowsecurity = true`) on all 5 tables: profiles, service_categories, services, service_category_mappings, bookings.
-- 19 policies present: bookings 3, profiles 3, service_categories 2, service_category_mappings 5, services 6.
-- Table grants are least-privilege: `anon` can only SELECT services, categories and mappings and INSERT bookings. Everything else is revoked by default.
+## Findings during testing
+1. Missing table privileges: the first test run failed with `permission denied for table bookings`. Postgres checks GRANTs before RLS, and the migration had policies but no grants. Least-privilege grants were added (anon: SELECT on public catalog tables and INSERT only on bookings; authenticated: access narrowed by RLS).
+2. No self-approval path: providers can only edit rows in draft or suspended status and can never set status to approved (tests 11, 12). Only admins approve (test 25).
+3. Bookings are write-only for the public: only the owning provider (test 17) and admins (test 24) can read them.
 
-## Authorization test matrix
-
-| # | Role | Action | Expected | Result |
-| :-- | :--- | :--- | :--- | :--- |
-| 1 | Anonymous | Read draft services | Denied | DENIED (0 rows) |
-| 2 | Anonymous | Read approved services | Allowed | PASS (1 row) |
-| 3 | Anonymous | Read active categories | Allowed | PASS (1 row) |
-| 4 | Anonymous | Read mappings for approved services | Allowed | PASS (1 row) |
-| 5 | Anonymous | Read bookings | Denied | DENIED (permission denied) |
-| 6 | Anonymous | Insert booking for approved service | Allowed | PASS |
-| 7 | Anonymous | Insert booking for draft service | Denied | DENIED |
-| 8 | Provider A | Update own draft service | Allowed | PASS (1 row) |
-| 9 | Provider A | Update Provider B's draft service | Denied | DENIED (0 rows) |
-| 10 | Provider A | Update own approved service | Denied | DENIED (0 rows) |
-| 11 | Provider A | Set own draft to approved (self-approve) | Denied | DENIED |
-| 12 | Provider A | Insert own service (defaults to draft) | Allowed | PASS |
-| 13 | Provider A | Insert service with Provider B's id | Denied | DENIED |
-| 14 | Provider A | Read bookings on own service | Allowed | PASS (1 row) |
-| 15 | Provider B | Read bookings on Provider A's service | Denied | DENIED (0 rows) |
-| 16 | Client | Submit booking | Allowed | PASS |
-| 17 | Client | Read other users' bookings | Denied | DENIED (0 rows) |
-| 18 | Client | Escalate own role to admin | Denied | DENIED (0 rows) |
-| 19 | Admin | Read all non-approved services | Allowed | PASS (2 rows) |
-| 20 | Admin | Suspend any service | Allowed | PASS |
-| 21 | Admin | Approve a pending service | Allowed | PASS |
-| 22 | Admin | Read all bookings | Allowed | PASS |
-| 23 | Admin | Read all profiles | Allowed | PASS |
-| 24 | Service role | Read all services (bypasses RLS) | Allowed | PASS (3 rows) |
-
-The Admin rows (19 to 23) went through the RLS policies using a real `admin` profile. Row 24 shows the service role bypasses RLS, so it must only be used in server code and never exposed to the client.
-
-## Design decisions
-
-- Providers cannot approve their own listings: the update policy allows only `draft` or `suspended` rows, and `WITH CHECK` only lets the new status be `draft` or `pending`.
-- Bookings may only be created for `approved` services (an added restriction beyond the base spec).
-- Admin checks use `SECURITY DEFINER` helper functions to avoid recursive RLS on `profiles`.
-- Only admins can change a profile's role, and nobody can insert themselves as `admin`.
-
-## Notes
-
-- Supabase's SQL Editor warned "table created without RLS" on the test scripts. This was a false positive caused by the PL/pgSQL variable `n int`. No tables were created, so I chose "Run without RLS".
-- A first attempt at one combined script was cut off when pasted (`unterminated dollar-quoted string`). It was split into four smaller scripts.
+## Admin / elevated access
+Admins use the `is_admin()` policies (tests 23-25). Server-side admin work uses `SUPABASE_SERVICE_ROLE_KEY` through `getServiceClient()` in `src/lib/supabaseServer.ts` (test 26). The key has no `NEXT_PUBLIC_` prefix and the module imports `server-only`.

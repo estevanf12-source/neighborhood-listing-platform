@@ -1,0 +1,9 @@
+{
+  "CallSid": "CAfixture0000000000000000000000001",
+  "AccountSid": "ACfixture000000000000000000000001",
+  "From": "+15555550123",
+  "To": "+15555550199",
+  "CallStatus": "ringing",
+  "Direction": "inbound",
+  "ApiVersion": "2010-04-01"
+}
